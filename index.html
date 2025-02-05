@@ -41,6 +41,10 @@
     </div>
 
     <script>
+        if (!document.createElement('model-viewer').constructor) {
+            alert('Your browser does not support 3D models.');
+        }
+        
         // Theme Toggle Functionality
         document.getElementById('theme-toggle').addEventListener('change', function () {
             document.body.classList.toggle('dark-theme');
