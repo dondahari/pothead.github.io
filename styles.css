@@ -1,0 +1,154 @@
+/* General Page Styling */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light Theme */
+.light-theme {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Dark Theme */
+.dark-theme {
+    background-color: #262626;
+    color: #ffffff;
+}
+
+/* Theme Toggle Container */
+.theme-toggle-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hide Default Checkbox */
+.theme-toggle {
+    display: none;
+}
+
+/* Toggle Label (Button Styling) */
+.toggle-label {
+    position: relative;
+    width: 70px;
+    height: 35px;
+    background-color: #000000;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Slider Circle */
+.toggle-slider {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 50%;
+    top: 7.5px;
+    left: 12px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Sun & Moon Icons */
+.toggle-icon {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+}
+
+.sun-icon {
+    background: url('sun.png') no-repeat center center / contain;
+    left: 15px;
+    top: 10.5px;
+}
+
+.moon-icon {
+    background: url('moon.png') no-repeat center center / contain;
+    right: 10px;
+    color: #f2c645;
+}
+
+/* Move Slider When Dark Theme is Active */
+.theme-toggle:checked + .toggle-label {
+    background-color: #000000;
+}
+
+.theme-toggle:checked + .toggle-label .toggle-slider {
+    transform: translateX(33px);
+}
+
+/* 3D Viewer Container */
+.viewer-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* 3D Viewer Styling */
+model-viewer {
+    width: 100vh;
+    height: 50vh;
+    background-color: #23222200;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Product Details */
+#product-details {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Text Styling */
+h2, p {
+    font-weight: 400;
+}
+
+h2 {
+    font-weight: 600;
+}
+
+/* Add to Cart Button */
+.add-to-cart {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.add-to-cart:hover {
+    background-color: #218838;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .viewer-container {
+        flex-direction: column;
+    }
+
+    model-viewer {
+        width: 80%;
+    }
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bud-E System</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@latest/dist/model-viewer.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="theme-toggle-container">
+        <input type="checkbox" id="theme-toggle" class="theme-toggle">
+        <label for="theme-toggle" class="toggle-label">
+            <span class="toggle-slider"></span>
+            <span class="toggle-icon sun-icon"></span>
+            <span class="toggle-icon moon-icon"></span>
+        </label>
+    </div>
+
+    <div class="viewer-container">
+        <model-viewer id="viewer2" 
+            src="Bud_E.glb" 
+            alt="3D Model 2" auto-reset auto-rotate camera-controls disable-pan exposure=".33">
+        </model-viewer>
+    </div>
+
+    <!-- Color Picker UI -->
+    <div class="color-picker-container">
+        <label for="color-picker">Choose a color:</label>
+        <input type="color" id="color-picker" value="#ffffff">
+    </div>
+
+    <div id="product-details">
+        <h2>Bud-E 001</h2>
+        <p>Bud-E System innovations to help the fellow PotHead</p>
+        <p><strong>Price: $99.99</strong></p>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        document.getElementById('theme-toggle').addEventListener('change', function () {
+            document.body.classList.toggle('dark-theme');
+            document.body.classList.toggle('light-theme');
+        });
+
+        // Color Picker Functionality
+        document.getElementById('color-picker').addEventListener('input', async function (event) {
+            const viewer = document.getElementById('viewer2');
+            
+            // Wait for the model to load
+            await viewer.updateComplete;
+            
+            // Access the model and change its material color
+            const model = viewer.model;
+            if (model) {
+                const color = hexToRgb(event.target.value);
+                model.materials.forEach(material => {
+                    material.pbrMetallicRoughness.setBaseColorFactor(color);
+                });
+            }
+        });
+
+        // Convert HEX to RGB
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, '');
+            let r = parseInt(hex.substring(0, 2), 16) / 255;
+            let g = parseInt(hex.substring(2, 4), 16) / 255;
+            let b = parseInt(hex.substring(4, 6), 16) / 255;
+            return [r, g, b, 1]; // RGBA format
+        }
+    </script>
+</body>
+</html>
