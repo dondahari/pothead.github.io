@@ -18,9 +18,13 @@
     </div>
 
     <div class="viewer-container">
-        <model-viewer src="https://raw.githubusercontent.com/dondahari/pothead.github.io/main/Bud_E.glb" ...></model-viewer> 
-            alt="3D Model 2" auto-reset auto-rotate camera-controls disable-pan exposure=".33">
-        </model-viewer>
+        <model-viewer id="viewer2" 
+    src="https://cdn.jsdelivr.net/gh/dondahari/pothead.github.io@main/Bud_E.glb" ...>
+    alt="3D Model 2"
+    auto-reset auto-rotate camera-controls disable-pan 
+    exposure="0.33"
+    max-camera-orbit="auto 90deg auto">
+</model-viewer>
     </div>
 
     <!-- Color Picker UI -->
@@ -37,6 +41,10 @@
     </div>
 
     <script>
+        if (!document.createElement('model-viewer').constructor) {
+            alert('Your browser does not support 3D models.');
+        }
+        
         // Theme Toggle Functionality
         document.getElementById('theme-toggle').addEventListener('change', function () {
             document.body.classList.toggle('dark-theme');
