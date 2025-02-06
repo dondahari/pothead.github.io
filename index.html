@@ -18,25 +18,14 @@
     </div>
 
     <div class="viewer-container">
-<<<<<<< Updated upstream
-        <model-viewer id="viewer2" 
-    src="https://cdn.jsdelivr.net/gh/dondahari/pothead.github.io@main/Bud_E.glb" ...>
-    alt="3D Model 2"
-    auto-reset auto-rotate camera-controls disable-pan 
-    exposure="0.33"
-    max-camera-orbit="auto 90deg auto">
-</model-viewer>
-=======
-        <model-viewer src="Bud_E.glb" ...></model-viewer> 
-            alt="3D Model 2" auto-reset auto-rotate camera-controls disable-pan exposure=".33">
-        </model-viewer>
->>>>>>> Stashed changes
-    </div>
-
-    <!-- Color Picker UI -->
-    <div class="color-picker-container">
-        <label for="color-picker">Choose a color:</label>
-        <input type="color" id="color-picker" value="#ffffff">
+        <div class="viewer-item">
+            <model-viewer id="viewer1" src="headie.glb" alt="Model 1" auto-reset auto-rotate camera-controls disable-pan exposure=".33"></model-viewer>
+            <input type="color" id="color-picker1" value="#ffffff">
+        </div>
+        <div class="viewer-item">
+            <model-viewer id="viewer2" src="pothead2.glb" alt="Model 2" auto-reset auto-rotate camera-controls disable-pan exposure=".33"></model-viewer>
+            <input type="color" id="color-picker2" value="#ffffff">
+        </div>
     </div>
 
     <div id="product-details">
@@ -57,14 +46,22 @@
             document.body.classList.toggle('light-theme');
         });
 
-        // Color Picker Functionality
-        document.getElementById('color-picker').addEventListener('input', async function (event) {
-            const viewer = document.getElementById('viewer2');
-            
-            // Wait for the model to load
+        // Color Picker Functionality for Each Model Viewer
+        document.getElementById('color-picker1').addEventListener('input', async function (event) {
+            const viewer = document.getElementById('viewer1');
             await viewer.updateComplete;
-            
-            // Access the model and change its material color
+            const model = viewer.model;
+            if (model) {
+                const color = hexToRgb(event.target.value);
+                model.materials.forEach(material => {
+                    material.pbrMetallicRoughness.setBaseColorFactor(color);
+                });
+            }
+        });
+
+        document.getElementById('color-picker2').addEventListener('input', async function (event) {
+            const viewer = document.getElementById('viewer2');
+            await viewer.updateComplete;
             const model = viewer.model;
             if (model) {
                 const color = hexToRgb(event.target.value);
