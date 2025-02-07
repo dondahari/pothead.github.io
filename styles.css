@@ -1,68 +1,61 @@
+:root {
+    --primary-bg-light: #ffffff;
+    --primary-text-light: #000000;
+    --primary-bg-dark: #262626;
+    --primary-text-dark: #ffffff;
+    --toggle-bg: #000000;
+    --toggle-slider: #ffffff;
+    --accent-color: #28a745;
+    --accent-hover: #218838;
+    --radius-sm: 5px;
+    --radius-lg: 20px;
+    --transition: 0.3s ease-in-out;
+}
+
 /* General Page Styling */
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-    padding-top: 10px;
+    padding: 1rem;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color var(--transition), color var(--transition);
 }
 
-/* Light Theme */
+/* Theme Styles */
 .light-theme {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: var(--primary-bg-light);
+    color: var(--primary-text-light);
 }
 
-/* Dark Theme */
 .dark-theme {
-    background-color: #262626;
-    color: #ffffff;
+    background-color: var(--primary-bg-dark);
+    color: var(--primary-text-dark);
 }
 
 /* Theme Toggle Container */
 .theme-toggle-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
 }
-
-/* Hide Default Checkbox */
 .theme-toggle {
-    display: none;
+    display: none
 }
-
-/* Toggle Label (Button Styling) */
+/* Toggle Switch */
 .toggle-label {
     position: relative;
-    width: 70px;
-    height: 35px;
-    background-color: #000000;
-    border-radius: 50px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px;
+    width: 4rem;
+    height: 2rem;
+    background-color: var(--toggle-bg);
+    border-radius: 2rem;
+    padding: 0.25rem;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
-}
-
-/* Slider Circle */
-.toggle-slider {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background-color: rgb(0, 0, 0);
-    border-radius: 50%;
-    top: 7.5px;
-    left: 12px;
-    transition: transform 0.3s ease-in-out;
+    transition: background var(--transition);
 }
 
 /* Sun & Moon Icons */
@@ -70,95 +63,150 @@ body {
     width: 22px;
     height: 22px;
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .sun-icon {
-    background: url('sun.png') no-repeat center center / contain;
-    left: 15px;
-    top: 10.5px;
+   
+    left: 8px;  /* Adjusted from 15px */
 }
 
 .moon-icon {
-    background: url('moon.png') no-repeat center center / contain;
-    right: 10px;
-    color: #f2c645;
+    
+    right: 8px;  /* Adjusted from 10px */
 }
 
-/* Move Slider When Dark Theme is Active */
-.theme-toggle:checked + .toggle-label {
-    background-color: #000000;
+/* Slider Circle */
+.toggle-slider {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 6px;  /* Adjusted from 12px */
+    transition: transform 0.3s ease-in-out;
 }
 
 .theme-toggle:checked + .toggle-label .toggle-slider {
-    transform: translateX(33px);
+    transform: translate(33px, -50%);  /* Added Y-axis translation */
 }
 
 /* 3D Viewer Container */
 .viewer-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
     width: 100%;
+    max-width: 1200px;
+    margin: 4rem auto 2rem;
+    padding: 0 1rem;
 }
 
-/* Individual Viewer Items */
 .viewer-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 45%;
+    gap: 1rem;
 }
 
-/* 3D Viewer Styling */
+/* 3D Model Styling */
 model-viewer {
     width: 100%;
-    height: 60vh;
-    background-color: #23222200;
-    border-radius: 20px;
+    height: 50vh;
+    min-height: 400px;
+    background-color: transparent;
+    border-radius: var(--radius-lg);
     overflow: hidden;
+    transition: box-shadow var(--transition);
+}
+
+.dark-theme model-viewer {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Color Picker */
+.color-picker-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+input[type="color"] {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 2px solid currentColor;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform var(--transition);
+}
+
+input[type="color"]:hover {
+    transform: scale(1.05);
 }
 
 /* Product Details */
 #product-details {
-    margin-top: 20px;
     text-align: center;
+    margin: 2rem 0;
+    max-width: 600px;
+    padding: 0 1rem;
 }
 
-/* Text Styling */
-h2, p {
-    font-weight: 400;
-}
-
-h2 {
-    font-weight: 600;
-}
-
-/* Add to Cart Button */
 .add-to-cart {
-    background-color: #28a745;
+    background-color: var(--accent-color);
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
     cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition), transform var(--transition);
 }
 
 .add-to-cart:hover {
-    background-color: #218838;
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .viewer-container {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+        margin-top: 5rem;
     }
 
-    .viewer-item {
-        width: 80%;
+    model-viewer {
+        height: 40vh;
+        min-height: 300px;
+    }
+
+    #product-details {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .theme-toggle-container {
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .toggle-label {
+        width: 3.5rem;
+        height: 1.75rem;
+    }
+
+    .toggle-slider {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .theme-toggle:checked + .toggle-label .toggle-slider {
+        transform: translateX(1.75rem);
     }
 }

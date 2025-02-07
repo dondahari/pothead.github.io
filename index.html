@@ -7,24 +7,34 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer@latest/dist/model-viewer.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="light-theme">
     <div class="theme-toggle-container">
         <input type="checkbox" id="theme-toggle" class="theme-toggle">
         <label for="theme-toggle" class="toggle-label">
             <span class="toggle-slider"></span>
-            <span class="toggle-icon sun-icon"></span>
-            <span class="toggle-icon moon-icon"></span>
+            <span class="toggle-icon sun-icon">☀️</span>
+            <span class="toggle-icon moon-icon">🌙</span>
         </label>
     </div>
 
     <div class="viewer-container">
         <div class="viewer-item">
-            <model-viewer id="viewer1" src="headie.glb" alt="Model 1" auto-reset auto-rotate camera-controls disable-pan exposure=".33" loading="lazy"></model-viewer>
-            <input type="color" id="color-picker1" value="#ffffff">
+            <model-viewer id="viewer1" src="headie.glb" alt="Model 1" 
+                        auto-reset auto-rotate camera-controls disable-pan 
+                        exposure=".33" loading="lazy"></model-viewer>
+            <label class="color-picker-label">
+                Color 1:
+                <input type="color" id="color-picker1" value="#ffffff">
+            </label>
         </div>
         <div class="viewer-item">
-            <model-viewer id="viewer2" src="pothead2.glb" alt="Model 2" auto-reset auto-rotate camera-controls disable-pan exposure=".33" loading="lazy"></model-viewer>
-            <input type="color" id="color-picker2" value="#ffffff">
+            <model-viewer id="viewer2" src="pothead2.glb" alt="Model 2" 
+                        auto-reset auto-rotate camera-controls disable-pan 
+                        exposure=".33" loading="lazy"></model-viewer>
+            <label class="color-picker-label">
+                Color 2:
+                <input type="color" id="color-picker2" value="#ffffff">
+            </label>
         </div>
     </div>
 
@@ -36,49 +46,67 @@
     </div>
 
     <script>
-        if (!document.createElement('model-viewer').constructor) {
-            alert('Your browser does not support 3D models.');
-        }
-        
-        // Theme Toggle Functionality
-        document.getElementById('theme-toggle').addEventListener('change', function () {
-            document.body.classList.toggle('dark-theme');
-            document.body.classList.toggle('light-theme');
-        });
+        (function() {
+            // Theme Management
+            const themeToggle = document.getElementById('theme-toggle');
+            const savedTheme = localStorage.getItem('theme') || 'light-theme';
+            
+            document.body.className = savedTheme;
+            themeToggle.checked = savedTheme === 'dark-theme';
 
-        // Color Picker Functionality for Each Model Viewer
-        document.getElementById('color-picker1').addEventListener('input', async function (event) {
-            const viewer = document.getElementById('viewer1');
-            await viewer.updateComplete;
-            const model = viewer.model;
-            if (model) {
-                const color = hexToRgb(event.target.value);
-                model.materials.forEach(material => {
-                    material.pbrMetallicRoughness.setBaseColorFactor(color);
-                });
+            themeToggle.addEventListener('change', function() {
+                const isDark = this.checked;
+                document.body.classList.toggle('dark-theme', isDark);
+                document.body.classList.toggle('light-theme', !isDark);
+                localStorage.setItem('theme', isDark ? 'dark-theme' : 'light-theme');
+            });
+
+            // Model Color Management
+            function createColorHandler(viewerId) {
+                return async function(event) {
+                    const viewer = document.getElementById(viewerId);
+                    await viewer.updateComplete;
+                    
+                    if (viewer.model) {
+                        const color = hexToRgb(event.target.value);
+                        // Target only the base material (adjust index as needed)
+                        const baseMaterial = viewer.model.materials[0];
+                        baseMaterial.pbrMetallicRoughness.setBaseColorFactor(color);
+                    }
+                };
             }
-        });
 
-        document.getElementById('color-picker2').addEventListener('input', async function (event) {
-            const viewer = document.getElementById('viewer2');
-            await viewer.updateComplete;
-            const model = viewer.model;
-            if (model) {
-                const color = hexToRgb(event.target.value);
-                model.materials.forEach(material => {
-                    material.pbrMetallicRoughness.setBaseColorFactor(color);
+            // Initialize color pickers
+            document.getElementById('color-picker1').addEventListener('input', 
+                createColorHandler('viewer1'));
+            
+            document.getElementById('color-picker2').addEventListener('input', 
+                createColorHandler('viewer2'));
+
+            // Error Handling
+            document.querySelectorAll('model-viewer').forEach(viewer => {
+                viewer.addEventListener('error', (event) => {
+                    console.error('Model loading error:', event.detail);
+                    alert('Error loading 3D model. Please try refreshing the page.');
                 });
-            }
-        });
+            });
 
-        // Convert HEX to RGB
-        function hexToRgb(hex) {
-            hex = hex.replace(/^#/, '');
-            let r = parseInt(hex.substring(0, 2), 16) / 255;
-            let g = parseInt(hex.substring(2, 4), 16) / 255;
-            let b = parseInt(hex.substring(4, 6), 16) / 255;
-            return [r, g, b, 1]; // RGBA format
-        }
+            // Utility function
+            function hexToRgb(hex) {
+                const bigint = parseInt(hex.slice(1), 16);
+                return [
+                    (bigint >> 16) & 255,
+                    (bigint >> 8) & 255,
+                    bigint & 255,
+                    255
+                ].map(x => x / 255);
+            }
+
+            // Initial theme setup
+            if (!document.createElement('model-viewer').constructor) {
+                alert('Your browser does not support 3D models. Please try a modern browser.');
+            }
+        })();
     </script>
 </body>
 </html>
